@@ -1,5 +1,5 @@
 from random import randint
-import math
+#import math
 from time import time
 
 
@@ -54,15 +54,15 @@ pocet_pokusu = 1
 hadaci_cislo = tvoreni_nahodneho_cisla()
 
 
-while pocet_pokusu < 20:
+while pocet_pokusu < 11:
     cislo_hrace = kontrola_cisla_hrace(input(">>> "))
     if pocet_pokusu == 1:
         pocatecni_cas = time()
     
-    spravne, spatne = kontrola_sparvnosti_cisla(cislo_hrace, hadaci_cislo)
-    if spravne == 4:
+    bulls, cows = kontrola_sparvnosti_cisla(cislo_hrace, hadaci_cislo)
+    if bulls == 4:
         break
-    print(f"bulls: {spravne} | cows: {spatne}")
+    print(f"bulls: {bulls} | cows: {cows}")
     pocet_pokusu += 1
 else:
     print("You loose")
@@ -73,3 +73,10 @@ print("Correct, you've guessed the right number")
 koncovy_cas = time()
 tvuj_cas = round(koncovy_cas - pocatecni_cas)
 print(f"Your time is: {tvuj_cas} seconds")
+
+
+# ++ pridat
+# nejmene odhadu
+# prumer odhadu
+# nejelpsi cas
+# prumer casovy
