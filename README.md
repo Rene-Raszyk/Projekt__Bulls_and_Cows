@@ -8,6 +8,7 @@ Email: 2004reno2004@gmail.com
 
 Tento program simuluje známou logickou hru "Bulls and Cows".  
 Cílem hry je uhodnout tajné čtyřmístné číslo, kde se žádná číslice neopakuje a číslo nezačíná nulou. Po každém tipu hráče program vypíše, kolik "bulls" (správná číslice na správném místě) a "cows" (správná číslice na špatném místě) tip obsahuje.
+Program také ukládá tvoje statistiky do textového souboru (stats.txt).
 
 ## Jak hrát
 

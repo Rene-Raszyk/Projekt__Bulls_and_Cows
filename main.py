@@ -1,7 +1,7 @@
 from random import randint
-#import math
 from time import time
-
+import os
+import re
 
 def tvoreni_nahodneho_cisla ():
     cislo = []
@@ -41,6 +41,57 @@ def kontrola_sparvnosti_cisla(cislo:list, pc_cislo:list):
 
     return bull, cows
 
+def zapis_cteni_soubor(cas, pokusy):
+    cislo_hodnot = []
+    if os.path.exists("stats.txt"):
+        txt_soubor = open("stats.txt", "r+")
+        obsah_txt = txt_soubor.read()
+        oddeleny_text = re.split(r"[ \n]", obsah_txt)
+        for i in range(len(oddeleny_text)):
+            if oddeleny_text[i].isnumeric():
+                cislo_hodnot.append(oddeleny_text[i])
+
+        pocet_her = int(cislo_hodnot[0])
+        prum_cas = float(cislo_hodnot[1])
+        nej_cas = int(cislo_hodnot[2])
+        prum_pokus = float(cislo_hodnot[3])
+        nej_pokus = int(cislo_hodnot[4])
+
+        pocet_her += 1
+        prum_cas = round(((pocet_her - 1) * prum_cas + cas) / pocet_her)
+        if nej_cas > cas:
+            nej_cas = cas
+        prum_pokus = round(((pocet_her - 1) * prum_pokus + pokusy) / pocet_her)
+        if nej_pokus > pokusy:
+            nej_pokus = pokusy
+
+        txt_soubor.seek(0)
+        txt_soubor.write(f"Number of games: {pocet_her}\n")
+        txt_soubor.write(f"Average time in seconds: {prum_cas}\n")
+        txt_soubor.write(f"Best time in seconds: {nej_cas}\n")
+        txt_soubor.write(f"Average number of attempts: {prum_pokus}\n")
+        txt_soubor.write(f"Least attempts: {nej_pokus}")
+        txt_soubor.truncate()
+
+        cislo = [pocet_her, prum_cas, nej_cas, prum_pokus, nej_pokus]
+
+    else: 
+        #vytvaření souboru + první zápis
+        pocet_her = 1
+        prumerny_cas = cas
+        nejelpsi_cas = cas
+        prumer_pokusu = pokusy
+        nejmene_pokusu = pokusy
+        cislo = [1, cas, cas, pokusy, pokusy]
+
+        txt_soubor = open("stats.txt", "w")
+        txt_soubor.write(f"Number of games: {pocet_her}\n")
+        txt_soubor.write(f"Average time in seconds: {prumerny_cas}\n")
+        txt_soubor.write(f"Best time in seconds: {nejelpsi_cas}\n")
+        txt_soubor.write(f"Average number of attempts: {prumer_pokusu}\n")
+        txt_soubor.write(f"Least attempts: {nejmene_pokusu}")
+
+    return cislo
 
 print("Hi there!\n" \
 "-----------------------------------------------\n" \
@@ -52,9 +103,8 @@ print("Hi there!\n" \
 
 pocet_pokusu = 1
 hadaci_cislo = tvoreni_nahodneho_cisla()
-
-
-while pocet_pokusu < 11:
+print(hadaci_cislo)
+while pocet_pokusu < 30:
     cislo_hrace = kontrola_cisla_hrace(input(">>> "))
     if pocet_pokusu == 1:
         pocatecni_cas = time()
@@ -63,6 +113,7 @@ while pocet_pokusu < 11:
     if bulls == 4:
         break
     print(f"bulls: {bulls} | cows: {cows}")
+    print("-----------------------------------------------")
     pocet_pokusu += 1
 else:
     print("You loose")
@@ -70,13 +121,19 @@ else:
     exit()
 
 print("Correct, you've guessed the right number")
+print("-----------------------------------------------")
+print("That's amazing!")
+print("-----------------------------------------------")
+
 koncovy_cas = time()
 tvuj_cas = round(koncovy_cas - pocatecni_cas)
-print(f"Your time is: {tvuj_cas} seconds")
+print(f"\nYour time is: {tvuj_cas} seconds")
+print("-----------------------------------------------")
+statistiky = zapis_cteni_soubor(tvuj_cas, pocet_pokusu)
+print("Here are your stats:")
+print(f"Number of games: {statistiky[0]}")
+print(f"Average time in seconds: {statistiky[1]}")
+print(f"Best time in seconds: {statistiky[2]}")
+print(f"Average number of attempts: {statistiky[3]}")
+print(f"Least attempts: {statistiky[4]}")
 
-
-# ++ pridat
-# nejmene odhadu
-# prumer odhadu
-# nejelpsi cas
-# prumer casovy
