@@ -1,3 +1,10 @@
+"""
+main.py: druhý projekt do Engeto Online Python Akademie
+
+author: Rene Raszyk
+email: 2004reno2004@gmail.com
+"""
+
 from random import randint
 from time import time
 import os
