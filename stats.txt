@@ -1,0 +1,5 @@
+Number of games: 4
+Average time in seconds: 210
+Best time in seconds: 28
+Average number of attempts: 7
+Least attempts: 4
