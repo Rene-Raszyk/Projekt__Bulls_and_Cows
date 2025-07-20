@@ -110,7 +110,7 @@ print("Hi there!\n" \
 
 pocet_pokusu = 1
 hadaci_cislo = tvoreni_nahodneho_cisla()
-print(hadaci_cislo)
+
 while pocet_pokusu < 30:
     cislo_hrace = kontrola_cisla_hrace(input(">>> "))
     if pocet_pokusu == 1:
