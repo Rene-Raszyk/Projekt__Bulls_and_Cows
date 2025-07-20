@@ -134,7 +134,7 @@ print("-----------------------------------------------")
 
 koncovy_cas = time()
 tvuj_cas = round(koncovy_cas - pocatecni_cas)
-print(f"\nYour time is: {tvuj_cas} seconds")
+print(f"Your time is: {tvuj_cas} seconds")
 print("-----------------------------------------------")
 statistiky = zapis_cteni_soubor(tvuj_cas, pocet_pokusu)
 print("Here are your stats:")
