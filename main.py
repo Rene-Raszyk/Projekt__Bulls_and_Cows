@@ -43,6 +43,7 @@ def checking_player_number(number: str):
                 return True
             j+=1
         return False
+    
     while (not number.isnumeric()) or (len(number) != 4) or (int(number) < 1000) or (duplicity_check(number)):
         print("Wrong number. Try again")
         number = input(">>> ")

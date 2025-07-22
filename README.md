@@ -33,16 +33,12 @@ Program také ukládá tvoje statistiky do textového souboru (stats.txt).
 ### Generování tajného čísla
 
 ```python
-def tvoreni_nahodneho_cisla ():
-    cislo = []
-    cislo.append(randint(1,9))
-    nove = randint(0,9)
-    while len(cislo) != 4:
-        while nove in cislo:
-            nove = randint(0,9)
-        else:
-            cislo.append(nove)
-    return "".join(map(str, cislo))
+def making_random_number ():
+    number = sample(range(10), 4)
+    while number[0] == 0:
+        number = sample(range(10), 4)
+
+    return "".join(map(str, number))
 ```
 **Popis:**
 
@@ -52,39 +48,31 @@ def tvoreni_nahodneho_cisla ():
 - Číslo musí být unikátní (každá číslice v číslu se musí lišit)
 
 ***Fungování funkce***
-1. Vytvoření prázdného seznamu pro jednotlivé číslice "cislo[]"
+1. Pomocí "sample(range(10), 4)" se náhodně vyberou 4 různé číslice (od 0 do 9).
 
-2. Přidání první číslice "cislo.append(randint(1,9))"
-- První číslice nesmí být nula, proto se losuje z čísel 1-9.
+2. Pokud první číslice je nula, číslo se zahodí a losuje se znovu "(while number[0] == 0:)".
 
-3. Generování následných číslic
-- První cyklus while kontroluje zda je číslo 4 místné, pokud není smyčka pokračuje, pokud je cyklus se zastaví. "while len(cislo) != 4:"
-- Následný while kontoluje zda nově vytvořené číslo, již je v seznamu, pokud není zapíše číslo do seznamu, pokud je cyklus pokračuje. "while nove in cislo:"
-- Následně se vygeneruje náhodné číslo. "nove = randint(0,9)"
-- Pokud číslo je unikátní přidá se do seznamu. "cislo.append(nove)"
+3. Po splnění podmínek se číslice převedou na řetězec pomocí "map(str, number)" a spojí se dohromady pomocí " "".join(...) ".
 
-4. Sloučení číslic do řetězce a následné vrácení hodnoty
-- Pomocí "map(str, cislo)" převedeme každé číslo na řetězec
-- Pomocí " "".join() " je spojí do jednoho čtyřciferného čísla ve formátu str.
-- Následně vrací hodnotu pomocí "return"
+4. Výsledkem je řetězec s unikátním 4 ciferným číslem, které nezačíná nulou.
 
 ---
 
 ### Kontrola vstupu od hráče
 
 ```python
-def kontrola_cisla_hrace(cislo):
-    def kontrola_duplicity(cislod:list):
+def checking_player_number(number: str):
+    def duplicity_check(duplicid_number:list):
         j = 0
         while j != 3:
-            if cislod[j] in cislod[j+1:]:
+            if duplicid_number[j] in duplicid_number[j+1:]:
                 return True
             j+=1
         return False
-    while (not cislo.isnumeric()) or (len(cislo) != 4) or (int(cislo) < 1000) or (kontrola_duplicity(cislo)):
+    while (not number.isnumeric()) or (len(number) != 4) or (int(number) < 1000) or (duplicity_check(number)):
         print("Wrong number. Try again")
-        cislo = input(">>> ")
-    return cislo
+        number = input(">>> ")
+    return number
 ```
 **Popis:**
 
@@ -95,13 +83,18 @@ def kontrola_cisla_hrace(cislo):
 - Číslo musí být unikátní 
 
 ***Fungování funkce***
-1. Fungování vnořené funkce
-- Vnořená funkce "kontrola_duplicity" zjišťuje zda hráč zadal unikátní   číslo (vrací False) nebo ne (vrací True).
-- Funguje správně i když je "cislod" string, protože string je iterovatelný jako seznam znaků.
+1. Vnořená funkce "duplicity_check(duplicid_number)"
+- Projde všechny číslice a ověřuje, zda se některá neopakuje.
+- Pokud najde duplicitu, vrací True, jinak False.
+- Funguje i se stringem, protože ten lze iterovat jako seznam znaků.
 
 2. Hlavní smyčka while
-- Pokud hráč zadá špatný vstup (nečíslo, špatná délka, začínající 0, duplicita), vypíše se chybové hlášení a požádá se o nové číslo.
-- Smyčka pokračuje, dokud není vstup správný.
+- Funkce stále opakuje výzvu k zadání, dokud vstup:
+    - neobsahuje pouze čísla (not number.isnumeric())
+    - nemá přesně 4 znaky (len(number) != 4)
+    - nezačíná nulou (int(number) < 1000)
+    - nemá opakující se číslice (duplicity_check(number))
+- Pokud některá z těchto podmínek není splněna, zobrazí se hláška "Wrong number. Try again" a funkce čeká na nový vstup.
 
 3. Návratová hodnota
 - Jakmile je vstup validní, funkce vrátí správné 4 místné číslo jako řetězec (string).
@@ -124,21 +117,23 @@ V pořádku → funkce vrátí "1234"
 ### Vyhodnocení tipu (bulls & cows)
 
 ```python
-def kontrola_sparvnosti_cisla(cislo:list, pc_cislo:list):
+def checking_the_correctness_of_the_number(number: list, pc_number: list):
     cows = 0
     bull = 0
+
     for i in range(0,4):
-        if cislo[i] == pc_cislo[i]:
+        if number[i] == pc_number[i]:
             bull +=1
-        elif cislo[i] in pc_cislo:
+        elif number[i] in pc_number:
             cows += 1
+
     return bull, cows
 ```
 **Popis:**  
-Funkce spočítá, kolik číslic je správně na správné pozici (bulls) a kolik číslic je správně, ale na špatné pozici (cows).
+Funkce porovnává hráčovo číslo s tajným číslem a vrací počet bulls (správná číslice na správné pozici) a počet cows (správná číslice na špatné pozici).
 
 ***Fungování funkce***
-1. Vstupní parametry "cislo:list, pc_cislo:list"
+1. Vstupní parametry "number:list, pc_number:list"
 - První parametr je hráčské číslo, které převádím do typu list.
 - Druhý parametr je vegenerované číslo, které je taktéž převedeno do typu list, aby se následně lépe porovnávaly číslice.
 
@@ -148,8 +143,8 @@ Funkce spočítá, kolik číslic je správně na správné pozici (bulls) a kol
 
 3. Hlavní cyklus
 - Smyčka prochází každou číslici na indexech 0 až 3. "for i in range(0, 4):"
-- Pokud se číslice i-tého indexu v obou číslech shodují → bull. " if cislo[i] == pc_cislo[i]:"
-- Pokud je číslice obsažena v tajném čísle, ale na jiném místě → cow. "elif cislo[i] in pc_cislo:"
+- Pokud se číslice i-tého indexu v obou číslech shodují → bull. " if number[i] == pc_number[i]:"
+- Pokud je číslice obsažena v tajném čísle, ale na jiném místě → cow. "elif number[i] in pc_number:"
 
 4. Návrat hodnot
 - Retur vrací dvojici hodnot: počet bull a počet cow. "return bull, cows"
